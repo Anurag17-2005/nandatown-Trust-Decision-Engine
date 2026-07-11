@@ -43,3 +43,11 @@ Thumbs.db
 # Environment
 .env
 .env.local
+
+# Internal notes (not for public repo)
+BUILD_SUMMARY.md
+FIXES_APPLIED.md
+FINAL_CHECKLIST.md
+QUICK_START.md
+DEPLOYMENT.md
+SUBMISSION.md
