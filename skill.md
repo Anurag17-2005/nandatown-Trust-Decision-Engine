@@ -2,18 +2,19 @@
 
 **Service URL**: `https://trust-decision-engine.onrender.com` *(will be updated after deployment)*
 
-**One-Line Summary**: Cryptographically validates NandaTown structured receipts, scores agent trustworthiness, and returns actionable ACCEPT/REJECT/ESCALATE decisions with signed verification receipts.
+**One-Line Summary**: Validates NandaTown structured receipts, scores agent trustworthiness, and returns actionable ACCEPT/REJECT/ESCALATE decisions with Ed25519-signed verification receipts.
 
 ## 🎯 What This Service Does
 
 The Trust Decision Engine solves a critical gap: validating NandaTown's native structured receipts and providing actionable trust decisions. While 30+ trust services exist, **none validate NandaTown receipts cryptographically**.
 
 **Key Features**:
-- ✅ Ed25519 signature verification on receipts
+- ✅ Receipt structure and format validation
+- ✅ Ed25519 signature format verification
 - ✅ Corroboration validation (multi-party attestation)
 - ✅ Reputation scoring using +1 good / -2 bad weighting (from PR #129)
 - ✅ Deterministic decision engine (ACCEPT/REJECT/ESCALATE)
-- ✅ Signed verification receipts for composability
+- ✅ Signed verification receipts for composability (using Ed25519)
 
 ## 📡 API Endpoints
 

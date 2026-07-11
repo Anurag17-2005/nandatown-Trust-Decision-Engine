@@ -45,9 +45,17 @@ Built the service that:
 
 ### 1. NandaTown-Native Receipt Validation
 - First service to validate NandaTown structured receipts
-- Ed25519 signature verification
+- Receipt structure and format verification
+- Ed25519 signature format validation
 - Corroboration checking (multi-party attestation)
 - Timestamp validation
+
+**Note**: This demo uses simplified receipt validation. Production would require:
+- Full DID resolver integration to fetch issuer public keys
+- Complete Ed25519 signature verification against resolved keys
+- DID document verification method validation
+
+The **verification receipts** that TDE itself issues ARE fully cryptographically signed with Ed25519 and verifiable offline - this is where the core composability value lies.
 
 ### 2. Deterministic Decision Engine
 - No LLM = fast, free, predictable

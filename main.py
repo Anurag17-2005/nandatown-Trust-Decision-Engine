@@ -110,11 +110,13 @@ async def decide(request: DecisionRequest):
     )
     
     # 4. Create response verdict
+    receipt_is_valid = validation.valid and validation.signature_valid
+    
     verdict = {
         "risk": decision_result["risk"],
         "recommendation": decision_result["recommendation"],
         "confidence": confidence,
-        "receipt_valid": validation.valid,
+        "receipt_valid": receipt_is_valid,
         "issuer_reputation": trust_score
     }
     
@@ -126,7 +128,7 @@ async def decide(request: DecisionRequest):
         risk=decision_result["risk"],
         recommendation=decision_result["recommendation"],
         confidence=confidence,
-        receipt_valid=validation.valid and validation.signature_valid,
+        receipt_valid=receipt_is_valid,
         issuer_reputation=trust_score,
         reason=decision_result["reason"],
         verification_receipt=verification_receipt

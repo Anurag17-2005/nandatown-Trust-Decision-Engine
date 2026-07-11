@@ -120,8 +120,10 @@ def demo_workflow():
     
     # Step 4: Show how this prevents tampering
     print("Step 4: Demonstrating tampering detection...")
-    tampered_data = decision_data.copy()
-    tampered_data['recommendation'] = 'ACCEPT'  # Tamper with decision
+    import copy
+    tampered_data = copy.deepcopy(decision_data)
+    # Tamper with the signed verdict (the part that's actually verified)
+    tampered_data['verification_receipt']['verdict']['recommendation'] = 'ACCEPT'
     
     print("   Attempting to verify tampered decision...")
     is_valid_tampered = verify_tde_decision_offline(tampered_data, tde_pubkey)

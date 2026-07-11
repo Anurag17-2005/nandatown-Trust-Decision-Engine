@@ -23,10 +23,15 @@ def validate_receipt(receipt: Receipt) -> ValidationResult:
     """
     Validate a NandaTown structured receipt
     Checks: signature, timestamp, corroborations
+    
+    NOTE: This is a simplified demo implementation. In production:
+    - Use a real DID resolver to get issuer's public key
+    - Verify Ed25519 signature against reconstructed message
+    - Check DID document for key authorization
     """
     result = ValidationResult()
     
-    # 1. Validate signature
+    # 1. Validate signature structure and format
     try:
         # Reconstruct message that was signed
         message = {
@@ -36,13 +41,20 @@ def validate_receipt(receipt: Receipt) -> ValidationResult:
             "timestamp": receipt.timestamp
         }
         
-        # Extract public key from DID (simplified - in prod use DID resolver)
-        # For demo, we'll assume signature is valid if format is correct
-        if len(receipt.signature) > 20:  # Basic format check
-            result.signature_valid = True
-        else:
+        # Basic validation: check signature format and issuer DID format
+        # For full production: resolve DID → get public key → verify signature
+        if not receipt.signature or len(receipt.signature) < 20:
             result.valid = False
+            result.signature_valid = False
             result.warnings.append("Invalid signature format")
+        elif not receipt.issuer_did.startswith("did:"):
+            result.valid = False
+            result.signature_valid = False
+            result.warnings.append("Invalid issuer DID format")
+        else:
+            # Demo: Accept well-formed signatures
+            # Production would call: crypto.verify_signature(message, receipt.signature, issuer_pubkey)
+            result.signature_valid = True
             
     except Exception as e:
         result.valid = False

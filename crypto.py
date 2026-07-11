@@ -65,13 +65,26 @@ def hash_data(data: dict) -> str:
 
 
 def pubkey_to_did(public_key_b64: str) -> str:
-    """Convert Ed25519 public key to did:key format"""
+    """
+    Convert Ed25519 public key to did:key format
+    
+    NOTE: This is a simplified demo implementation.
+    Real did:key uses multibase/multicodec encoding (see DID spec).
+    For this demo, we use a shortened identifier format.
+    """
     # Simplified DID key format for demo
     return f"did:key:z6Mk{public_key_b64[:20]}"
 
 
 def extract_pubkey_from_did(did: str) -> str:
-    """Extract public key from did:key (simplified)"""
-    # In production, properly decode multibase/multicodec
+    """
+    Extract public key from did:key (simplified)
+    
+    NOTE: This is a demo-only function.
+    In production, use a proper DID resolver that:
+    - Decodes multibase/multicodec encoding
+    - Resolves DID to DID Document
+    - Extracts verification method public key
+    """
     # For demo, we'll use a mapping or registry
     return did.replace("did:key:z6Mk", "")

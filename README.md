@@ -2,17 +2,17 @@
 
 🏆 **NandaHack Phase 2 Submission**
 
-A standalone FastAPI service that validates NandaTown structured receipts and returns actionable trust decisions.
+A standalone FastAPI service that validates NandaTown structured receipts and returns actionable trust decisions with Ed25519-signed verification receipts.
 
 ## What Makes This Novel?
 
 **The Gap**: 222 services exist, 30+ handle trust/reputation, but **NONE validate NandaTown's native structured receipts cryptographically**.
 
 **The Solution**: First NandaTown-native receipt validator that:
-- ✅ Validates Ed25519 signatures on receipts
+- ✅ Validates receipt structure and Ed25519 signature format
 - ✅ Scores agent reputation using deterministic formula
 - ✅ Returns actionable ACCEPT/REJECT/ESCALATE decisions
-- ✅ Provides signed verification receipts for composability
+- ✅ Provides Ed25519-signed verification receipts for composability
 
 ## Phase 1 → Phase 2 Story
 
