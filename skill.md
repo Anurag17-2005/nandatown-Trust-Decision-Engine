@@ -26,33 +26,27 @@ Use this service when you need to:
 
 ---
 
-## Agent Workflow
+## Primary Endpoint
+
+**Most agents should call `POST /decide`**. It performs receipt validation, computes trust, assesses risk, and returns an actionable recommendation (ACCEPT, ESCALATE, or REJECT). 
+
+Use the other endpoints only for specialized tasks such as querying trust scores or reporting outcomes.
+
+---
+
+## Typical Workflow
 
 ```
-┌─────────────────────────────────────────────────┐
-│  Your Agent                                     │
-└──────────────┬──────────────────────────────────┘
-               │
-               │ 1. Collect receipt from other agent
-               ▼
-    ┌──────────────────────────┐
-    │  POST /decide            │
-    │  (receipt + action)      │
-    └──────────┬───────────────┘
-               │
-               │ 2. Get decision + reasoning
-               ▼
-         ┌─────────────┐
-         │ ACCEPT?     │
-         └─────┬───────┘
-               │
-       ┌───────┼───────┐
-       │       │       │
-      YES     MAYBE    NO
-       │       │       │
-       ▼       ▼       ▼
-   Continue  Escalate  Stop
-   Process   to Human  Process
+Receipt from other agent
+        │
+        ▼
+POST /decide
+        │
+        ▼
+Recommendation
+  ├── ACCEPT → Continue process
+  ├── ESCALATE → Human review
+  └── REJECT → Stop process
 ```
 
 **Simple Example**:
@@ -61,18 +55,18 @@ Use this service when you need to:
 receipt = other_agent.get_receipt()
 
 # 2. Ask for decision
-response = requests.post(
+decision = requests.post(
     "https://trust-decision-engine.onrender.com/decide",
     json={"receipt": receipt, "action": "release_payment"}
 ).json()
 
 # 3. Act on recommendation
-if response['recommendation'] == 'ACCEPT':
+if decision['recommendation'] == 'ACCEPT':
     release_payment()
-elif response['recommendation'] == 'ESCALATE':
-    notify_human(response['reason'])
+elif decision['recommendation'] == 'ESCALATE':
+    notify_human(decision['reason'])
 else:  # REJECT
-    cancel_transaction(response['reason'])
+    cancel_transaction(decision['reason'])
 ```
 
 ---
@@ -82,6 +76,8 @@ else:  # REJECT
 ### 1. POST `/decide` - Main Decision Endpoint
 
 **Purpose**: Get actionable trust decision with reasoning
+
+**When to use**: This is the primary endpoint - use it for most trust decisions.
 
 **Request**:
 ```json
@@ -106,16 +102,16 @@ else:  # REJECT
   "confidence": 0.94,
   "receipt_valid": true,
   "issuer_reputation": 0.91,
-  "reason": "High trust score (0.91). Agent has 42 verified reports. Receipt valid with 2 corroborations.",
+  "reason": "High trust score (0.91). Agent has 42 verified reports.",
   "verification_receipt": {
     "verifier": "did:key:z6Mk...",
-    "input_hash": "sha256:abc123...",
     "verdict": {...},
-    "issued_at": 1752200005,
     "signature": "base64-ed25519-sig"
   }
 }
 ```
+
+**Note**: Store the `verification_receipt` if another service may later need proof that TDE issued this decision.
 
 **curl Example**:
 ```bash
@@ -138,7 +134,9 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 ### 2. POST `/validate-receipt` - Receipt Validation Only
 
-**Purpose**: Validate receipt structure without scoring
+**Purpose**: Validate receipt structure without trust scoring
+
+**When to use**: When you only need format validation, not a trust decision.
 
 **Request**: Same receipt structure as `/decide`
 
@@ -177,7 +175,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 ### 4. POST `/trust/report` - Submit Outcome Report
 
-**Purpose**: Report transaction outcome (builds reputation)
+**Purpose**: Report transaction outcome to build reputation network
 
 **Request**:
 ```json
@@ -189,7 +187,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 }
 ```
 
-**Important**: Always report outcomes to build the reputation network.
+**Recommended**: Report outcomes after completed transactions to improve future trust scores.
 
 ---
 
@@ -211,7 +209,26 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 ---
 
-### 6. GET `/health` - Health Check
+### 6. GET `/pubkey` - Get Public Key
+
+**Purpose**: Retrieve TDE's public key for offline signature verification
+
+**When to use**: When you need to verify `verification_receipt` signatures without network calls.
+
+**curl**: `curl https://trust-decision-engine.onrender.com/pubkey`
+
+**Response**:
+```json
+{
+  "public_key": "MCowBQYDK2VwAyEA...",
+  "did": "did:key:z6Mk...",
+  "key_type": "Ed25519"
+}
+```
+
+---
+
+### 7. GET `/health` - Health Check
 
 **curl**: `curl https://trust-decision-engine.onrender.com/health`
 
@@ -275,43 +292,24 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 **Escrow Service Using TDE**:
 
 ```python
-class EscrowService:
-    def release_payment(self, seller_receipt):
-        # 1. Ask TDE for decision
-        decision = requests.post(
-            "https://trust-decision-engine.onrender.com/decide",
-            json={
-                "receipt": seller_receipt,
-                "action": "release_payment"
-            }
-        ).json()
-        
-        # 2. Act on recommendation
-        if decision['recommendation'] == 'ACCEPT':
-            self.transfer_funds(seller_receipt['subject_id'])
-            self.report_outcome("good", seller_receipt)
-            return "Payment released"
-            
-        elif decision['recommendation'] == 'ESCALATE':
-            self.notify_human_reviewer(decision['reason'])
-            return "Pending human review"
-            
-        else:  # REJECT
-            self.refund_buyer()
-            self.report_outcome("bad", seller_receipt)
-            return "Payment rejected"
-    
-    def report_outcome(self, outcome, receipt):
-        # 3. Always report outcomes (builds network)
-        requests.post(
-            "https://trust-decision-engine.onrender.com/trust/report",
-            json={
-                "agent_id": receipt['issuer_did'],
-                "outcome": outcome,
-                "receipt_hash": hash_receipt(receipt),
-                "reporter_id": self.agent_id
-            }
-        )
+# Get decision from TDE
+decision = requests.post(
+    "https://trust-decision-engine.onrender.com/decide",
+    json={
+        "receipt": seller_receipt,
+        "action": "release_payment"
+    }
+).json()
+
+# Act on recommendation
+if decision['recommendation'] == 'ACCEPT':
+    transfer_funds(seller_id)
+    report_outcome("good", seller_receipt)
+elif decision['recommendation'] == 'ESCALATE':
+    notify_human_reviewer(decision['reason'])
+else:  # REJECT
+    refund_buyer()
+    report_outcome("bad", seller_receipt)
 ```
 
 ---
