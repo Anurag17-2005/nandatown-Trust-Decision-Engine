@@ -151,9 +151,9 @@ Other services can:
 
 ## Live Demo
 
-**Service URL**: https://trust-decision-engine.onrender.com *(update after deployment)*  
-**API Docs**: https://trust-decision-engine.onrender.com/docs  
-**SKILL.md**: https://trust-decision-engine.onrender.com/skill.md
+**Service URL**: https://nandatown-trust-decision-engine.onrender.com *(update after deployment)*  
+**API Docs**: https://nandatown-trust-decision-engine.onrender.com/docs  
+**SKILL.md**: https://nandatown-trust-decision-engine.onrender.com/skill.md
 
 ## Technical Stack
 

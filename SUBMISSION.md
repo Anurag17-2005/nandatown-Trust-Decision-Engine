@@ -2,7 +2,7 @@
 
 **Submission Date**: July 11, 2026  
 **GitHub**: https://github.com/Anurag17-2005/trust-decision-engine  
-**Service URL**: https://trust-decision-engine.onrender.com *(to be updated after deployment)*
+**Service URL**: https://nandatown-trust-decision-engine.onrender.com *(to be updated after deployment)*
 
 ---
 
@@ -181,7 +181,7 @@ def compute_trust_score(agent_id: str) -> float:
 ```python
 # Escrow service needs to decide whether to release payment
 decision = requests.post(
-    "https://trust-decision-engine.onrender.com/decide",
+    "https://nandatown-trust-decision-engine.onrender.com/decide",
     json={
         "receipt": seller_receipt,
         "action": "release_payment"
@@ -316,7 +316,7 @@ trust-decision-engine/
 - "It's the first service to validate NandaTown receipts and return actionable trust decisions"
 
 **[0:30-1:00] Show SKILL.md**
-- Open https://trust-decision-engine.onrender.com/skill.md
+- Open https://nandatown-trust-decision-engine.onrender.com/skill.md
 - "Here's the complete documentation - 7 endpoints"
 - "Main one is /decide - validates receipt and returns ACCEPT/REJECT/ESCALATE"
 
@@ -339,10 +339,10 @@ trust-decision-engine/
 
 ## Live Service URLs (After Deployment)
 
-- **Service**: https://trust-decision-engine.onrender.com
-- **API Docs**: https://trust-decision-engine.onrender.com/docs
-- **SKILL.md**: https://trust-decision-engine.onrender.com/skill.md
-- **Health**: https://trust-decision-engine.onrender.com/health
+- **Service**: https://nandatown-trust-decision-engine.onrender.com
+- **API Docs**: https://nandatown-trust-decision-engine.onrender.com/docs
+- **SKILL.md**: https://nandatown-trust-decision-engine.onrender.com/skill.md
+- **Health**: https://nandatown-trust-decision-engine.onrender.com/health
 - **GitHub**: https://github.com/Anurag17-2005/trust-decision-engine
 
 ---
@@ -365,7 +365,7 @@ trust-decision-engine/
 - **GitHub**: https://github.com/Anurag17-2005
 - **NandaTown Fork**: https://github.com/Anurag17-2005/nandatown
 - **Phase 1 PRs**: #129, #133
-- **Phase 2 Service**: https://trust-decision-engine.onrender.com
+- **Phase 2 Service**: https://nandatown-trust-decision-engine.onrender.com
 
 ---
 

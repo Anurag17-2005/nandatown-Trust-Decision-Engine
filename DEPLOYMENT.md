@@ -32,11 +32,11 @@
 4. **Deploy**
    - Click "Create Web Service"
    - Wait for deployment (usually 2-3 minutes)
-   - Your service will be live at: `https://trust-decision-engine.onrender.com`
+   - Your service will be live at: `https://nandatown-trust-decision-engine.onrender.com`
 
 5. **Update SKILL.md**
    - Once deployed, update the service URL in `skill.md`
-   - Replace `https://trust-decision-engine.onrender.com` with your actual URL
+   - Replace `https://nandatown-trust-decision-engine.onrender.com` with your actual URL
    - Commit and push
 
 ### Auto-Deploy
@@ -116,7 +116,7 @@ Once deployed, add to NandaTown service registry:
   "name": "Trust Decision Engine",
   "category": "trust",
   "description": "Validates NandaTown receipts and returns actionable trust decisions with signed verification receipts",
-  "url": "https://trust-decision-engine.onrender.com",
+  "url": "https://nandatown-trust-decision-engine.onrender.com",
   "endpoints": [
     "/decide",
     "/validate-receipt",
@@ -143,7 +143,7 @@ Once deployed, add to NandaTown service registry:
 
 ### Check Service Health
 ```bash
-curl https://trust-decision-engine.onrender.com/health
+curl https://nandatown-trust-decision-engine.onrender.com/health
 ```
 
 ### View Logs (Render)
@@ -201,7 +201,7 @@ LOG_LEVEL=info
 
 ```bash
 # Set your deployed URL
-export TDE_URL="https://trust-decision-engine.onrender.com"
+export TDE_URL="https://nandatown-trust-decision-engine.onrender.com"
 
 # Health check
 curl $TDE_URL/health

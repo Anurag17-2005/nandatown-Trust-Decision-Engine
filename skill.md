@@ -1,6 +1,6 @@
 # Trust Decision Engine
 
-**Service URL**: `https://trust-decision-engine.onrender.com` *(update after deployment)*
+**Service URL**: `https://nandatown-trust-decision-engine.onrender.com`
 
 ---
 
@@ -78,7 +78,7 @@ receipt = other_agent.get_receipt()
 
 # 2. Ask for decision
 decision = requests.post(
-    "https://trust-decision-engine.onrender.com/decide",
+    "https://nandatown-trust-decision-engine.onrender.com/decide",
     json={"receipt": receipt, "action": "release_payment"}
 ).json()
 
@@ -137,7 +137,7 @@ else:  # REJECT
 
 **curl Example**:
 ```bash
-curl -X POST https://trust-decision-engine.onrender.com/decide \
+curl -X POST https://nandatown-trust-decision-engine.onrender.com/decide \
   -H "Content-Type: application/json" \
   -d '{
     "receipt": {
@@ -179,7 +179,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 **Purpose**: Check reputation of any agent
 
-**curl**: `curl https://trust-decision-engine.onrender.com/trust/agent-42`
+**curl**: `curl https://nandatown-trust-decision-engine.onrender.com/trust/agent-42`
 
 **Response**:
 ```json
@@ -219,7 +219,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 **Purpose**: Choose between multiple agents
 
-**curl**: `curl "https://trust-decision-engine.onrender.com/trust/compare?agent_a=alice&agent_b=bob"`
+**curl**: `curl "https://nandatown-trust-decision-engine.onrender.com/trust/compare?agent_a=alice&agent_b=bob"`
 
 **Response**:
 ```json
@@ -239,7 +239,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 **When to use**: When you need to verify `verification_receipt` signatures without network calls.
 
-**curl**: `curl https://trust-decision-engine.onrender.com/pubkey`
+**curl**: `curl https://nandatown-trust-decision-engine.onrender.com/pubkey`
 
 **Response**:
 ```json
@@ -254,7 +254,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 
 ### 7. GET `/health` - Health Check
 
-**curl**: `curl https://trust-decision-engine.onrender.com/health`
+**curl**: `curl https://nandatown-trust-decision-engine.onrender.com/health`
 
 ---
 
@@ -318,7 +318,7 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 ```python
 # Get decision from TDE
 decision = requests.post(
-    "https://trust-decision-engine.onrender.com/decide",
+    "https://nandatown-trust-decision-engine.onrender.com/decide",
     json={
         "receipt": seller_receipt,
         "action": "release_payment"
@@ -340,7 +340,7 @@ else:  # REJECT
 
 ## Support
 
-- **Interactive Docs**: `https://trust-decision-engine.onrender.com/docs` (auto-generated Swagger)
+- **Interactive Docs**: `https://nandatown-trust-decision-engine.onrender.com/docs` (auto-generated Swagger)
 - **Health Check**: `GET /health`
 - **Response Time**: Typically < 200ms
-- **GitHub**: https://github.com/YOUR_USERNAME/trust-decision-engine
+- **GitHub**: https://github.com/Anurag17-2005/trust-decision-engine
