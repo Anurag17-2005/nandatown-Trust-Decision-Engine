@@ -8,7 +8,7 @@
 
 ## One-Line Pitch
 
-Cryptographically validates NandaTown structured receipts, scores agent trustworthiness, and returns actionable ACCEPT/REJECT/ESCALATE decisions with signed verification receipts for composability.
+Validates NandaTown structured receipts, scores agent trustworthiness, and returns actionable ACCEPT/REJECT/ESCALATE decisions with Ed25519-signed verification receipts for composability.
 
 ---
 
@@ -214,7 +214,7 @@ if verify_signature(decision, tde_pubkey):
 
 ### Correctness (20%)
 ✅ Deterministic decision logic (no randomness)  
-✅ Cryptographic verification (Ed25519)  
+✅ Ed25519-signed verification receipts (real crypto for composability)  
 ✅ Proper error handling  
 ✅ Input validation (Pydantic schemas)
 
@@ -351,7 +351,7 @@ trust-decision-engine/
 
 | Criterion | Score Target | How We Achieve It |
 |-----------|--------------|-------------------|
-| **Correctness** | 20/20 | Deterministic logic, crypto verification, error handling |
+| **Correctness** | 20/20 | Deterministic logic, Ed25519-signed outputs, error handling |
 | **Test Rigor** | 20/20 | Test script, verification demo, curl examples |
 | **API Fit** | 20/20 | RESTful, clear schemas, auto-docs, no auth |
 | **Docs Quality** | 20/20 | Complete SKILL.md, examples, integration patterns |
