@@ -26,6 +26,28 @@ Use this service when you need to:
 
 ---
 
+## Receipt Format
+
+A valid receipt must contain:
+
+```json
+{
+  "issuer_did": "did:key:z6Mk...",      // Agent who issued this receipt
+  "subject_id": "agent-42",              // Agent being evaluated  
+  "claim": "delivered_goods",            // What was done
+  "timestamp": 1752200000,               // Unix timestamp
+  "signature": "base64-ed25519",         // Cryptographic signature
+  "corroborations": []                   // Optional: witnesses
+}
+```
+
+**Corroborations** (optional): Add witnesses to increase trust
+```json
+{"cosigner_did": "did:key:z6Mk...", "signature": "base64..."}
+```
+
+---
+
 ## Primary Endpoint
 
 **Most agents should call `POST /decide`**. It performs receipt validation, computes trust, assesses risk, and returns an actionable recommendation (ACCEPT, ESCALATE, or REJECT). 
@@ -90,7 +112,7 @@ else:  # REJECT
     "signature": "base64-signature",
     "corroborations": []
   },
-  "action": "release_payment"
+  "action": "release_payment"  // Your intended action - provides context
 }
 ```
 
@@ -111,7 +133,7 @@ else:  # REJECT
 }
 ```
 
-**Note**: Store the `verification_receipt` if another service may later need proof that TDE issued this decision.
+**Note**: Store the `verification_receipt` to prove this decision to other services. Verify offline using the signature and public key from `/pubkey`.
 
 **curl Example**:
 ```bash
@@ -188,6 +210,8 @@ curl -X POST https://trust-decision-engine.onrender.com/decide \
 ```
 
 **Recommended**: Report outcomes after completed transactions to improve future trust scores.
+
+**Effect**: Your report immediately updates the agent's trust score and affects future decisions.
 
 ---
 
@@ -316,6 +340,7 @@ else:  # REJECT
 
 ## Support
 
-- **Service Status**: `GET /health`
-- **Interactive Docs**: `https://trust-decision-engine.onrender.com/docs`
+- **Interactive Docs**: `https://trust-decision-engine.onrender.com/docs` (auto-generated Swagger)
+- **Health Check**: `GET /health`
+- **Response Time**: Typically < 200ms
 - **GitHub**: https://github.com/YOUR_USERNAME/trust-decision-engine
